@@ -3,33 +3,16 @@ import { Card, Each } from "../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-
-const url = "https://api.themoviedb.org/3";
-const apiKey = import.meta.env.VITE_API_MOVIEDB;
-const apiKeyBearer = import.meta.env.VITE_API_MOVIEDB_BEARER;
-
-let headers = {
-  accept: "application/json",
-  Authorization: `Bearer ${apiKeyBearer}`,
-};
-
-const getData = async (path) => {
-  const resServ = await fetch(`${url}${path}`, {
-    method: "GET",
-    headers,
-  });
-
-  return resServ.json();
-};
+import getMovies from "../api/movie/getMovies";
+import searchMovie from "../api/movie/searchMovie";
+import getMovie from "../api/movie/getMovie";
 
 export default function MyMovies() {
   const [popularMovies, setPopularMovies] = useState([]);
 
   useEffect(() => {
     // fetch api here
-    getData("/movie/popular?language=en-EN&page=1").then((res) =>
-      setPopularMovies(res.results)
-    );
+    getMovies().then((res) => setPopularMovies(res.items));
   }, []);
 
   return (
@@ -51,22 +34,26 @@ function Movie({ detail, className }) {
   const [resMovie, setResMovie] = useState();
 
   const handleCloseModal = () => {
-    document.getElementById(`detail_movie_${detail.id}`).classList.remove('modal-open');
-  }
+    document
+      .getElementById(`detail_movie_${detail.id}`)
+      .classList.remove("modal-open");
+  };
 
   const handleClickModal = async () => {
     //harus fetch di sini, trs masukin ke resMovie, trs open modal
-    await getData(`/movie/${detail.id}`).then(res => setResMovie(res))
+    // await getData(`/movie/${detail.id}`).then(res => setResMovie(res))
+    getMovie(detail.id).then((res) => setResMovie(res));
     // open modal here
-    document.getElementById(`detail_movie_${detail.id}`).classList.add('modal-open');
-  }
-
+    document
+      .getElementById(`detail_movie_${detail.id}`)
+      .classList.add("modal-open");
+  };
 
   return (
     <>
       {detail.poster_path ? (
         <img
-        onClick={handleClickModal}
+          onClick={handleClickModal}
           src={`https://image.tmdb.org/t/p/original/${detail.poster_path}`}
           alt=""
           className={`rounded w-32 mr-2 flex-auto ${className}`}
@@ -74,16 +61,27 @@ function Movie({ detail, className }) {
       ) : (
         ""
       )}
-        <dialog id={`detail_movie_${detail.id}`} className="modal modal-middle">
+      <dialog id={`detail_movie_${detail.id}`} className="modal modal-middle">
         <div className="modal-box">
-          <img src={`https://image.tmdb.org/t/p/original/${detail.poster_path}`} width={200} alt="" className="rounded mx-auto" />
+          <img
+            src={`https://image.tmdb.org/t/p/original/${detail.poster_path}`}
+            width={200}
+            alt=""
+            className="rounded mx-auto"
+          />
           <h3 className="font-bold text-2xl mt-2">{detail.title}</h3>
-          <p className="py-4">
-            {detail.overview}
-          </p>
+          <p className="py-4">{detail.overview}</p>
           <div className="modal-action">
-            {resMovie ? (<Link to={resMovie.homepage} className="btn btn-primary">Official Web</Link>): ""}
-            <button className="btn" onClick={handleCloseModal}>Close</button>
+            {resMovie ? (
+              <Link to={resMovie.homepage} className="btn btn-primary">
+                Official Web
+              </Link>
+            ) : (
+              ""
+            )}
+            <button className="btn" onClick={handleCloseModal}>
+              Close
+            </button>
           </div>
         </div>
       </dialog>
@@ -123,9 +121,7 @@ export function MovieSearch() {
     e.preventDefault();
 
     // do fetch here!
-    getData(`/search/movie?api_key=${apiKey}&query=${searchQuery}`).then(
-      (res) => setSearchResult(res.results)
-    );
+    searchMovie(searchQuery).then((res) => setSearchResult(res.items));
   };
 
   const SearchResult = () => {
