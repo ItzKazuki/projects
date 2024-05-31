@@ -10,7 +10,8 @@ import {
   faInfoCircle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import MyTour from "./pages/MyTour";
+// import MyTour from "./pages/MyTour";
+import ProjectCodingClub from "./pages/ProjectCodingClub";
 
 export default function App() {
   return (
@@ -43,13 +44,19 @@ export default function App() {
             }
           />
           <Route
+            path="moisture-detector"
+            element={
+              <ProjectCodingClub />
+            }
+          />
+          {/* <Route
             path="my-tour"
             element={
               <MyTourLayout>
                 <MyTour />
               </MyTourLayout>
             }
-          />
+          /> */}
         </Route>
       </Route>
     </Routes>
