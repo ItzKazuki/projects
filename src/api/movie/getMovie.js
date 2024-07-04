@@ -1,10 +1,6 @@
 import http, { movieApiBearer } from "../http";
 
-http.interceptors.request.use(config => {
-  config.baseURL = "https://api.themoviedb.org/3";
-  config.headers['Authorization'] = `Bearer ${movieApiBearer}`;
-  return config;
-})
+
 
 export default (id) => {
   return new Promise((resolve, reject) => {

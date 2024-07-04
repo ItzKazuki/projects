@@ -1,9 +1,12 @@
-import http from "./http";
+import axios from "axios";
 
-http.interceptors.request.use(config => {
-  config.baseURL = "https://iot-backend-api.vercel.app";
-  return config;
-})
+const http = axios.create({
+  baseURL: "https://iot-backend-api.vercel.app",
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  }
+});
 
 export default () => {
   return new Promise((resolve, reject) => {
