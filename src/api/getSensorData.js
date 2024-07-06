@@ -18,6 +18,8 @@ export default () => {
             tingkat_kelembapan: data.data.kelembapan,
             jenis_kelembapan: data.data.tingkat_kelembapan,
             jenis_koneksi: data.data.koneksi.split(" ")[1],
+            // wifi: data.data.wifi ? data.data.wifi : {SSID: "Unknown", SSID_Strength: "-99 dBm"},
+            wifi: data?.data?.wifi,
             inserted_at: data.data.insert_at,
             updated_at: data.data.updated_at
         })

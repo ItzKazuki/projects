@@ -19,6 +19,9 @@ const SoilMoistureComponents = ({ data }) => {
       <p className="text-lg font-bold mt-4">
         Kondisi tanah: {data.jenis_kelembapan}
       </p>
+      <span className="text-sm text-gray-500 mt-2 text-center">Updated: {new Date(data.updated_at).toLocaleString("id-ID", {
+        timeZone: "Asia/Jakarta",  dateStyle: 'full', timeStyle: 'short' 
+      })}</span>
     </div>
   );
 };
